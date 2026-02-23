@@ -48,6 +48,7 @@ class UserController extends Controller
             'message' => "Create User: $user->first_name. Successfully!"
         ]);
 
+        return $this->apiResponse(message: "Create User: $user->first_name. Successfully!", data: $user);
     }
 
     /**
@@ -82,10 +83,8 @@ class UserController extends Controller
             $data['password'] = Hash::make($data['password']);
         }
         $user->update($data);
-        return response()->json([
-            'data' => $user,
-            'message' => "Update User: $user->first_name . $user->lastname. Successfully!"
-        ]);
+
+        return $this->apiResponse(message: "Update User: $user->first_name . $user->lastname. Successfully!", data: $user);
     }
 
     /**
@@ -94,8 +93,15 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return response()->json([
-            'massage' => "Delete user: $user->email"
-        ]);
+        
+        return $this->apiResponse(message: "Delete user: $user->email");
+    }
+
+    private function apiResponse($message = null, $data = null, $status = 200)
+    {
+        $body = [];
+        !is_null($message) && $body['message'] = $message;
+        !is_null($data) && $body['data'] = $data;
+        return response()->json($body, $status);
     }
 }
