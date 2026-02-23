@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\v1\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\User\UserDetailsApiResource;
+use App\Http\Resources\Admin\User\UsersListApiResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,11 +17,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::all();
+        $user = User::paginate(15);
 
-        return response()->json([
-            'data' => $user,
-        ]);
+        return UsersListApiResource::collection($user);
     }
 
     /**
@@ -47,7 +47,7 @@ class UserController extends Controller
             'data' => $user,
             'message' => "Create User: $user->first_name. Successfully!"
         ]);
-        
+
     }
 
     /**
@@ -55,9 +55,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response()->json([
-            'data' => $user,
-        ]);
+        return new UserDetailsApiResource($user);
     }
 
     /**
