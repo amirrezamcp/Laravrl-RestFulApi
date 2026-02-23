@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\User\UserDetailsApiResource;
 use App\Http\Resources\Admin\User\UsersListApiResource;
 use App\Models\User;
+use App\RestFulApi\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -43,12 +44,13 @@ class UserController extends Controller
         $data = $validator->validated();
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
-        return response()->json([
-            'data' => $user,
-            'message' => "Create User: $user->first_name. Successfully!"
-        ]);
 
-        return $this->apiResponse(message: "Create User: $user->first_name. Successfully!", data: $user);
+        // return $this->apiResponse(message: "Create User: $user->first_name. Successfully!", data: $user);
+
+        $response = new ApiResponse();
+        $response->setMessage("Create User: $user->first_name. Successfully!");
+        $response->setData($user);
+        return $response->response();
     }
 
     /**
@@ -84,7 +86,11 @@ class UserController extends Controller
         }
         $user->update($data);
 
-        return $this->apiResponse(message: "Update User: $user->first_name . $user->lastname. Successfully!", data: $user);
+        // return $this->apiResponse(message: "Update User: $user->first_name . $user->lastname. Successfully!", data: $user);
+        $response = new ApiResponse();
+        $response->setMessage("Update User: $user->first_name . $user->lastname. Successfully!");
+        $response->setData($user);
+        return $response->response();
     }
 
     /**
@@ -93,15 +99,10 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        
-        return $this->apiResponse(message: "Delete user: $user->email");
-    }
 
-    private function apiResponse($message = null, $data = null, $status = 200)
-    {
-        $body = [];
-        !is_null($message) && $body['message'] = $message;
-        !is_null($data) && $body['data'] = $data;
-        return response()->json($body, $status);
+        // return $this->apiResponse(message: "Delete user: $user->email");
+        $response = new ApiResponse();
+        $response->setMessage("Delete user: $user->email");
+        return $response->response();
     }
 }
