@@ -8,6 +8,7 @@ use App\Http\Resources\Admin\User\UsersListApiResource;
 use App\Models\User;
 use App\RestFulApi\ApiResponse;
 use App\RestFulApi\ApiResponseBuilder;
+use App\RestFulApi\Facades\ApiResponse as FacadesApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -48,7 +49,7 @@ class UserController extends Controller
 
         // return $this->apiResponse(message: "Create User: $user->first_name. Successfully!", data: $user);
 
-        return (new ApiResponseBuilder())->withMessage("Create User: $user->first_name. Successfully!")->withData($user)->build()->response();
+        return FacadesApiResponse::withMessage("Create User: $user->first_name. Successfully!")->withData($user)->build()->response();
     }
 
     /**
@@ -85,7 +86,7 @@ class UserController extends Controller
         $user->update($data);
 
         // return $this->apiResponse(message: "Update User: $user->first_name . $user->lastname. Successfully!", data: $user);
-        return (new ApiResponseBuilder())->withMessage("Create User: $user->first_name. Successfully!")->withData($user)->build()->response();
+        return FacadesApiResponse::withMessage("Create User: $user->first_name. Successfully!")->withData($user)->build()->response();
     }
 
     /**
@@ -96,6 +97,6 @@ class UserController extends Controller
         $user->delete();
 
         // return $this->apiResponse(message: "Delete user: $user->email");
-        return (new ApiResponseBuilder())->withMessage("Create User: $user->first_name. Successfully!")->build()->response();
+        return FacadesApiResponse::withMessage("Create User: $user->first_name. Successfully!")->build()->response();
     }
 }
