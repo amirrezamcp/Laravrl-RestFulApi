@@ -50,6 +50,7 @@ class UserController extends Controller
         $response = new ApiResponse();
         $response->setMessage("Create User: $user->first_name. Successfully!");
         $response->setData($user);
+        $response->setAppends(["new" => "hiiiiiiii"]);
         return $response->response();
     }
 

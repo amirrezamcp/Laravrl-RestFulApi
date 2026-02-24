@@ -10,6 +10,7 @@ class ApiResponse
 
     private int $status = 200;
 
+    private array $appends = [];
 
 
     /**
@@ -48,12 +49,24 @@ class ApiResponse
         return $this;
     }
 
+    /**
+     * Set the value of appends
+     *
+     * @return  self
+     */
+    public function setAppends($appends)
+    {
+        $this->appends = $appends;
 
-    public function response($message = null, $data = null, $status = 200)
+        return $this;
+    }
+
+    public function response()
     {
         $body = [];
         !is_null($this->message) && $body['message'] = $this->message;
         !is_null($this->data) && $body['data'] = $this->data;
+        $body = $body + $this->appends;
         return response()->json($body, $this->status);
     }
 }
